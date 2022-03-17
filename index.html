@@ -24,6 +24,43 @@
             aria-label="Generated Password"
           ></textarea>
         </div>
+        <div class="slidecontainer">
+          <p>Allowed Characters: </p>
+          <div id="toggles">
+          <ul>
+          <li>
+            Uppercase
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </li>
+          <li>
+            Lowercase
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </li>
+          <li>
+            Numeric
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </li>
+          <li>
+            Special
+            <label class="switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </li>
+        </ul>
+        </div>
+          <p>Password Length: <span id="demo"></span></p>
+          <input type="range" min="8" max="128" value="8" class="slider" id="myRange">
+        </div>
         <div class="card-footer">
           <button id="generate" class="btn">Generate Password</button>
         </div>
