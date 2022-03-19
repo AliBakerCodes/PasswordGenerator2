@@ -89,7 +89,7 @@ function randNum(min, max) {
 
   //Function to esecape special characters on output (was causing undefined)
   function escapeRegex(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return string.replace(/[.*+?^'${}()|[\]\\]/g, '\$&');
   }
 
 //Generate the password
@@ -208,24 +208,21 @@ var tglNumeric= document.getElementById("tglNumeric")
 var tglSpecial= document.getElementById("tglSpecial")
 var tglLower= document.getElementById("tglLower")
 
-passwordInpt['len']=inptLenTxt.value;
-inptLenTxt.value = slider.value; // Display the default slider value
 
+inptLenTxt.value = slider.value; // Display the default slider value
 // Update the input box value (each time you drag the slider handle) and update the
 //password input object length property
 slider.oninput = function() {
-  inptLenTxt.value = this.value;
-  passwordInpt['len']=this.value;
-  
+  inptLenTxt.value = this.value;  
 }
 //update the slider each time you enter into the input box and update the
 //password input object length property
 inptLenTxt.oninput = function() {
-  slider.value = this.value;
-  passwordInpt['len']=this.value;
-  
+  slider.value = this.value;  
 }
 
+inptLenTxt.addEventListener("input")=function() {
+  slider.value=this.value
+}
 
-
-// inptLenTxt.addEventListener("focusout",validateLengthInput(passwordInpt))
+// inptLenTxt.addEventListener("input",validateLengthInput(passwordInpt))

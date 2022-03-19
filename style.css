@@ -128,6 +128,9 @@ button[disabled] {
   text-align: center;
 }
 
+#rngPasswordLength {
+  margin-top: 20px;
+}
 /* The slider itself */
 .slider {
   -webkit-appearance: none;  /* Override default CSS styles */
