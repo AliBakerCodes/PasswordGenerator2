@@ -246,6 +246,19 @@ input:checked + .toggle:before {
   top:-50px;
 }
 
+/* Hidden divs for error alert */
+
+#lenError{
+  display: none;
+  color: red;
+}
+
+#typeError{
+  display: none;
+  color: red;
+}
+
+
 @media (max-width: 690px) {
   .btn {
     font-size: 1rem;

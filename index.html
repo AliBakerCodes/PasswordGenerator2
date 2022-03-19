@@ -50,12 +50,18 @@
               </label>
               <p>Password Length:</p>
               <label class="inptLen" id="passwordLength">
-                <input type="text" id="inptLenTxt">
+                <input type="text" id="inptLenTxt" onfocusout="inptTxt()">
               </label>
               <label for = "rngPasswordLength">
           <input type="range" min="8" max="128" value="8" class="slider round" id="rngPasswordLength"></label>
         </div>
         <div class="card-footer">
+          <div id="lenError">
+            <p>Password Length must be between 8-128</p>
+          </div>
+          <div id="typeError">
+            <p>Must select at least one type of allowed characters</p>
+          </div>
           <button id="generate" type="button" class="btn">Generate Password</button>
         </div>
       </div>

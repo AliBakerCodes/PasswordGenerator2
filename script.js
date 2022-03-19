@@ -1,4 +1,6 @@
 // Assignment Code
+
+//Password input object
 var passwordInpt = {
   len: 8,
   lower: false,
@@ -9,27 +11,39 @@ var passwordInpt = {
   validType: false,
 };
 
+//Character types
 var validUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 var validLower = "abcdefghijklmnopqrstuvwxyz"
 var validNumber ="1234567890"
 var validSpecial =" !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
+//Query Selectors
 var generateBtn = document.querySelector("#generate");
 var passwordText = document.querySelector("#password");
-// Add event listener to generate button
+
+
+
+
+//hidden error divs
+var lenErrorDiv=document.getElementById("lenError");
+var typeErrorDiv=document.getElementById("typeError");
+
+//event listeners
 generateBtn.addEventListener("click", writePassword);
+
+
 
 // Write password to the #password input
 function writePassword() {
   getUserInputLength();
   getUserInputType();
-  //Validate input. If validated, 
-  validateTypeInput(passwordInpt);
+  validateTypeInput(passwordInpt); //Validate input. If validated,
   validateLengthInput(passwordInpt);
   console.log(passwordInpt.len)
   console.log(passwordInpt.validLength)
   console.log(passwordInpt.validType)
   if (passwordInpt.validLength && passwordInpt.validType) {
+    
     //Generate Password
     var password = generatePassword(
       passwordInpt.len,
@@ -40,8 +54,6 @@ function writePassword() {
     );
 
     //Output Password
-    
-
     passwordText.value = password;
   }
 }
@@ -50,9 +62,10 @@ function writePassword() {
 function validateLengthInput(password) {
   if (password.len >= 8 && password.len <= 128) {
     password.validLength = true;
+    lenErrorDiv.style.display = "none";
   } else {
     if (!passwordInpt.validLength) {
-      alert("Length must be between 8-128");
+      lenErrorDiv.style.display = "block"
     }
     password.validLength = false;
   }
@@ -66,10 +79,12 @@ function validateLengthInput(password) {
     password.numeric != false ||
     password.special != false
   ) {
+    typeErrorDiv.style.display = "none"; //Hide error div
     password.validType = true;
   } else {
+    
     if (!passwordInpt.validType) {
-      alert("You must select at least one valid type");
+      typeErrorDiv.style.display = "block"; //Show the error div
     }
     password.validType = false;
   }
@@ -80,6 +95,7 @@ function randArray(charArray) {
   var index = Math.floor(Math.random() * charArray.length);
   return index;
 }
+
 //Randomly select a number between min and max inclusive
 function randNum(min, max) {
     min = Math.ceil(min);
@@ -87,10 +103,10 @@ function randNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min); 
   };
 
-  //Function to esecape special characters on output (was causing undefined)
-  function escapeRegex(string) {
-    return string.replace(/[.*+?^'${}()|[\]\\]/g, '\$&');
-  }
+//Esecape special characters on output (was causing undefined)
+function escapeRegex(string) {
+  return string.replace(/[.*+?^'${}()|[\]\\]/g, '\$&');
+}
 
 //Generate the password
 function generatePassword(length, lower, upper, numeric, special) {
@@ -105,6 +121,7 @@ function generatePassword(length, lower, upper, numeric, special) {
   var numbers=""
   var specialChars=""
   var charTypeArray =[]
+  
   // For each selected char type, create a string of the desired password length, then add that to the end of our charType array
   if (lower){
   for (i = 0; i < length; i++) {
@@ -139,6 +156,7 @@ if (special){
   console.log(specialChars);
 } 
   console.log(charTypeArray)
+
   //For the given password length, choose an array index at random (and therefor a character type at random)
   // and a character in that array. Since the characters were chosen at random when the array was created, they should be random as well. 
   //Then add to the generated password variable
@@ -183,46 +201,70 @@ for (i=0; i< length; i++) {
 }
 }
 
+//Form controls
+var slider = document.getElementById("rngPasswordLength");
+var inptLenTxt = document.getElementById("inptLenTxt");
+var tglLower= document.getElementById("tglLower");
+var tglUpper= document.getElementById("tglUpper");
+var tglNumeric= document.getElementById("tglNumeric");
+var tglSpecial= document.getElementById("tglSpecial");
 
 
-//Get user inputs for password length and character type using prompts
-//Sanitize inputs to uppercase
+//Get user inputs for password length
 function getUserInputLength() {
   passwordInpt['len']=inptLenTxt.value;
 }
-//Get user inputs and validate on input
-  function getUserInputType() {
+
+//Get user inputs for char types
+function getUserInputType() {
     passwordInpt['lower'] = tglLower.checked;
     passwordInpt['upper'] = tglUpper.checked;
     passwordInpt['numeric'] = tglNumeric.checked;
     passwordInpt['special'] = tglSpecial.checked;
- }
+}
   
+//Validate the input length if you type in the box and change focus
+function inptTxt () {
+  slider.value=inptLenTxt.value;
+  passwordInpt['len']=inptLenTxt.value
+  validateLengthInput(passwordInpt);
+}
 
+inptLenTxt.addEventListener("focusout",inptTxt);
 
-//Form controls
-var slider = document.getElementById("rngPasswordLength");
-var inptLenTxt = document.getElementById("inptLenTxt");
-var tglUpper= document.getElementById("tglUpper")
-var tglNumeric= document.getElementById("tglNumeric")
-var tglSpecial= document.getElementById("tglSpecial")
-var tglLower= document.getElementById("tglLower")
+// Display the default slider value
+inptLenTxt.value = slider.value; 
 
-
-inptLenTxt.value = slider.value; // Display the default slider value
 // Update the input box value (each time you drag the slider handle) and update the
 //password input object length property
 slider.oninput = function() {
   inptLenTxt.value = this.value;  
 }
+
 //update the slider each time you enter into the input box and update the
 //password input object length property
 inptLenTxt.oninput = function() {
   slider.value = this.value;  
 }
 
-inptLenTxt.addEventListener("input")=function() {
-  slider.value=this.value
-}
-
-// inptLenTxt.addEventListener("input",validateLengthInput(passwordInpt))
+//If you fail type validation, toggling a toggle will clear the error message
+tglLower.addEventListener("change", (event) => {
+  if (event.currentTarget.checked) {
+    typeErrorDiv.style.display = "none";
+    }
+})
+tglUpper.addEventListener("change", (event) => {
+  if (event.currentTarget.checked) {
+    typeErrorDiv.style.display = "none";
+    }
+})
+tglNumeric.addEventListener("change", (event) => {
+  if (event.currentTarget.checked) {
+    typeErrorDiv.style.display = "none";
+    }
+})
+tglSpecial.addEventListener("change", (event) => {
+  if (event.currentTarget.checked) {
+    typeErrorDiv.style.display = "none";
+    }
+})
