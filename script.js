@@ -1,6 +1,6 @@
 // Assignment Code
 var passwordInpt = {
-  len: 0,
+  len: 8,
   lower: false,
   upper: false,
   numeric: false,
@@ -9,11 +9,6 @@ var passwordInpt = {
   validType: false,
 };
 
-var allowLower = "";
-var allowUpper = "";
-var allowNumeric = "";
-var allowSpecial = "";
-
 var validUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 var validLower = "abcdefghijklmnopqrstuvwxyz"
 var validNumber ="1234567890"
@@ -21,29 +16,19 @@ var validSpecial =" !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
 var generateBtn = document.querySelector("#generate");
 var passwordText = document.querySelector("#password");
+// Add event listener to generate button
+generateBtn.addEventListener("click", writePassword);
 
-function initialze() {
-  passwordInpt['len']=0
-  passwordInpt['lower']=false
-  passwordInpt['upper']=false
-  passwordInpt['numeric']=false
-  passwordInpt['special']=false
-  passwordInpt['validLength']=false
-  passwordInpt['validType']= false
-  allowLower = "";
-  allowUpper = "";
-  allowNumeric = "";
-  allowSpecial = "";
-  passwordText.value=null;
-}
 // Write password to the #password input
 function writePassword() {
-  initialze()
   getUserInputLength();
   getUserInputType();
-  validateTypeInput(passwordInpt);
-
   //Validate input. If validated, 
+  validateTypeInput(passwordInpt);
+  validateLengthInput(passwordInpt);
+  console.log(passwordInpt.len)
+  console.log(passwordInpt.validLength)
+  console.log(passwordInpt.validType)
   if (passwordInpt.validLength && passwordInpt.validType) {
     //Generate Password
     var password = generatePassword(
@@ -61,17 +46,18 @@ function writePassword() {
   }
 }
 
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
-
 //Validates password length input. Throw an error if password number out of 8-128 range 
 function validateLengthInput(password) {
   if (password.len >= 8 && password.len <= 128) {
     password.validLength = true;
   } else {
+    if (!passwordInpt.validLength) {
+      alert("Length must be between 8-128");
+    }
     password.validLength = false;
   }
 }
+
 //Validate password type input. Throw an error at least 1 character type not picked"
   function validateTypeInput(password) {
   if (
@@ -82,10 +68,10 @@ function validateLengthInput(password) {
   ) {
     password.validType = true;
   } else {
-    password.validType = false;
     if (!passwordInpt.validType) {
       alert("You must select at least one valid type");
     }
+    password.validType = false;
   }
 }
 
@@ -202,18 +188,14 @@ for (i=0; i< length; i++) {
 //Get user inputs for password length and character type using prompts
 //Sanitize inputs to uppercase
 function getUserInputLength() {
-  //Validate Password Length Input
-  validateLengthInput(passwordInpt);
-  if (!passwordInpt.validLength) {
-    alert("You must select a length between 8-128");
-  } 
+  passwordInpt['len']=inptLenTxt.value;
 }
 //Get user inputs and validate on input
   function getUserInputType() {
-    passwordInpt.lower = tglLower.value;
-    passwordInpt.upper = tglUpper.value;
-    passwordInpt.numeric = tglNumeric.value;
-    passwordInpt.special = tglSpecial.value;
+    passwordInpt['lower'] = tglLower.checked;
+    passwordInpt['upper'] = tglUpper.checked;
+    passwordInpt['numeric'] = tglNumeric.checked;
+    passwordInpt['special'] = tglSpecial.checked;
  }
   
 
@@ -221,6 +203,12 @@ function getUserInputLength() {
 //Form controls
 var slider = document.getElementById("rngPasswordLength");
 var inptLenTxt = document.getElementById("inptLenTxt");
+var tglUpper= document.getElementById("tglUpper")
+var tglNumeric= document.getElementById("tglNumeric")
+var tglSpecial= document.getElementById("tglSpecial")
+var tglLower= document.getElementById("tglLower")
+
+passwordInpt['len']=inptLenTxt.value;
 inptLenTxt.value = slider.value; // Display the default slider value
 
 // Update the input box value (each time you drag the slider handle) and update the
@@ -228,11 +216,16 @@ inptLenTxt.value = slider.value; // Display the default slider value
 slider.oninput = function() {
   inptLenTxt.value = this.value;
   passwordInpt['len']=this.value;
+  
 }
 //update the slider each time you enter into the input box and update the
 //password input object length property
 inptLenTxt.oninput = function() {
   slider.value = this.value;
   passwordInpt['len']=this.value;
+  
 }
 
+
+
+// inptLenTxt.addEventListener("focusout",validateLengthInput(passwordInpt))
