@@ -1,5 +1,4 @@
 // Assignment Code
-var generateBtn = document.querySelector("#generate");
 var passwordInpt = {
   len: 0,
   lower: false,
@@ -9,22 +8,42 @@ var passwordInpt = {
   validLength: false,
   validType: false,
 };
+
 var allowLower = "";
 var allowUpper = "";
 var allowNumeric = "";
 var allowSpecial = "";
-var plen = 0;
 
-var validChars = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0","!",'"',"#","$","%","&","'","(",")","*","+",",","-",".","\/",":",";","<","=",">","?","@","\[","\]","\\","^","_","`","{","|","}","~"," ",];
- 
+var validUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+var validLower = "abcdefghijklmnopqrstuvwxyz"
+var validNumber ="1234567890"
+var validSpecial =" !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
+var generateBtn = document.querySelector("#generate");
+var passwordText = document.querySelector("#password");
+
+function initialze() {
+  passwordInpt['len']=0
+  passwordInpt['lower']=false
+  passwordInpt['upper']=false
+  passwordInpt['numeric']=false
+  passwordInpt['special']=false
+  passwordInpt['validLength']=false
+  passwordInpt['validType']= false
+  allowLower = "";
+  allowUpper = "";
+  allowNumeric = "";
+  allowSpecial = "";
+  passwordText.value=null;
+}
 // Write password to the #password input
 function writePassword() {
-  getUserInput();
+  initialze()
+  getUserInputLength();
+  getUserInputType();
+  validateTypeInput(passwordInpt);
 
-  //Validate input
-  validateInput(passwordInpt);
-
+  //Validate input. If validated, 
   if (passwordInpt.validLength && passwordInpt.validType) {
     //Generate Password
     var password = generatePassword(
@@ -36,7 +55,7 @@ function writePassword() {
     );
 
     //Output Password
-    var passwordText = document.querySelector("#password");
+    
 
     passwordText.value = password;
   }
@@ -45,13 +64,16 @@ function writePassword() {
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
-//Validates password inputs. Throw an error if password number out of 8-128 range or at least 1 character type not picked"
-function validateInput(password) {
+//Validates password length input. Throw an error if password number out of 8-128 range 
+function validateLengthInput(password) {
   if (password.len >= 8 && password.len <= 128) {
     password.validLength = true;
   } else {
     password.validLength = false;
   }
+}
+//Validate password type input. Throw an error at least 1 character type not picked"
+  function validateTypeInput(password) {
   if (
     password.lower != false ||
     password.upper != false ||
@@ -61,91 +83,156 @@ function validateInput(password) {
     password.validType = true;
   } else {
     password.validType = false;
-  }
-
-  if (!passwordInpt.validLength) {
-    alert("You must select a length between 8-128");
-  }
-  if (!passwordInpt.validType) {
-    alert("You must select at least one valid type");
+    if (!passwordInpt.validType) {
+      alert("You must select at least one valid type");
+    }
   }
 }
+
 // Randomly select a number between 0 and the number of allowed characters
-function randNum() {
-  var index = Math.floor(Math.random() * validChars.length);
+function randArray(charArray) {
+  var index = Math.floor(Math.random() * charArray.length);
   return index;
 }
-//Tests for special characters
-function containsSpecialChars(str) {
-  var regex = /[ !\"#$%&\'()*+,-./:;<=>?@\[\\\]^_`{|}~]/;
-  return regex.test(str);
-}
-//Tests for numbers
-function containsNumbers(str) {
-  const regex = /^[0-9]+$/;
-  return regex.test(str);
-}
-//Tests for Upper Case
-function containsUpper(str) {
-  const regex = /[A-Z]/;
-  return regex.test(str);
-}
-//Tests for Lower Case
-function containsLower(str) {
-  const regex = /[a-z]/;
-  return regex.test(str);
-}
+//Randomly select a number between min and max inclusive
+function randNum(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); 
+  };
+
+  //Function to esecape special characters on output (was causing undefined)
+  function escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
 //Generate the password
 function generatePassword(length, lower, upper, numeric, special) {
 
   var generated = "";
-  var tempchar = "";
-// Generate random number. Pick from array of allowed characters. 
-// Test character to determine type and if user selected type.
-// If both match write to output string 
-  do {
-    tempchar = validChars[randNum()];
-     if (lower && containsLower(tempchar)) {
-      generated = generated + tempchar;
-    } else if (upper && containsUpper(tempchar)) {
-      generated = generated + tempchar;
-    } else if (numeric && containsNumbers(tempchar)) {
-      generated = generated + tempchar;
-    } else if (special && containsSpecialChars(tempchar)) {
-      generated = generated + tempchar;
-    }
-  } while (generated.length < length);
-  return generated;
+  var lowerTest=false;
+  var upperTest=false;
+  var numericTest=false;
+  var specialTest=false;
+  var uppercase =""
+  var lowercase=""
+  var numbers=""
+  var specialChars=""
+  var charTypeArray =[]
+  // For each selected char type, create a string of the desired password length, then add that to the end of our charType array
+  if (lower){
+  for (i = 0; i < length; i++) {
+    lowercase=lowercase+validLower.charAt(randNum(0,25));
+  }
+  charTypeArray.push(lowercase)
+  console.log("lowercase:")
+  console.log(lowercase);
 }
+if (upper){
+  for (i = 0; i < length; i++) {
+    uppercase=uppercase+validUpper.charAt(randNum(0,25));
+  }
+  charTypeArray.push(uppercase)
+  console.log("uppercase:")
+  console.log(uppercase);
+}
+if (numeric){
+  for (i = 0; i < length; i++) {
+    numbers=numbers+validNumber.charAt(randNum(0,9));
+  }
+  charTypeArray.push(numbers)
+  console.log("numbers:")
+  console.log(numbers);
+}
+if (special){
+  for (i = 0; i < length; i++) {
+    specialChars=specialChars+validSpecial.charAt(randNum(0,32));
+  }
+  charTypeArray.push(specialChars)
+  console.log("specialChars:")
+  console.log(specialChars);
+} 
+  console.log(charTypeArray)
+  //For the given password length, choose an array index at random (and therefor a character type at random)
+  // and a character in that array. Since the characters were chosen at random when the array was created, they should be random as well. 
+  //Then add to the generated password variable
+  for (i=0; i< length; i++) {
+    generated=generated + charTypeArray[randArray(charTypeArray)].charAt(i)
+    console.log(generated)
+  }
+
+ //There is an edge case where if truly random, the generated password might not have
+ //one of each character type. Iterate through the generated password and ensure that it
+ //has one of each character type
+for (i=0; i< length; i++) {
+  if((lower) && (validLower.includes(generated.charAt(i)))) {
+      lowerTest=true;
+    }
+}
+for (i=0; i< length; i++) {
+    if((upper) && (validUpper.includes(generated.charAt(i)))) {
+        upperTest=true;
+      }
+    } 
+  
+  for (i=0; i< length; i++) {
+    if((numeric) && (validNumber.includes(generated.charAt(i)))) {
+        numericTest=true;
+      }
+    }
+  
+  for (i=0; i< length; i++) {
+    if((special) && (validSpecial.includes(generated.charAt(i)))) {
+        specialTest=true;
+      }
+    }
+//We had to check all 4 character types, but all might not be needed. So insure that
+//the booleans match between selected type and tested type. If all the booleans match,
+//test is successful. If not, generate a new pass with the same criteria
+  if (((lower === lowerTest) && (upper === upperTest) && (numeric == numericTest) && (special == specialTest))) {
+    generated=escapeRegex(generated)
+    return generated
+  } else {
+  generatePassword(length, lower, upper, numeric, special)
+}
+}
+
+
+
 //Get user inputs for password length and character type using prompts
 //Sanitize inputs to uppercase
-function getUserInput() {
-  //Input prompts
-  passwordInpt.len = prompt("Choose Password Length (8-128)");
-  allowLower = prompt("Lower Case Allowed? (Y/N)");
-  //update the correct boolean on Y
-  if (allowLower.toUpperCase() == "Y") {
-    passwordInpt.lower = true;
-  }
-  allowUpper = prompt("Upper Case Allowed? (Y/N)");
-  if (allowUpper.toUpperCase() == "Y") {
-    passwordInpt.upper = true;
-  }
-  allowNumeric = prompt("Numeric Case Allowed? (Y/N)");
-  if (allowNumeric.toUpperCase() == "Y") {
-    passwordInpt.numeric = true;
-  }
-  allowSpecial = prompt("Special Case Allowed? (Y/N)");
-  if (allowSpecial.toUpperCase() == "Y") {
-    passwordInpt.special = true;
-  }
+function getUserInputLength() {
+  //Validate Password Length Input
+  validateLengthInput(passwordInpt);
+  if (!passwordInpt.validLength) {
+    alert("You must select a length between 8-128");
+  } 
 }
+//Get user inputs and validate on input
+  function getUserInputType() {
+    passwordInpt.lower = tglLower.value;
+    passwordInpt.upper = tglUpper.value;
+    passwordInpt.numeric = tglNumeric.value;
+    passwordInpt.special = tglSpecial.value;
+ }
+  
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("demo");
-output.innerHTML = slider.value; // Display the default slider value
 
-// Update the current slider value (each time you drag the slider handle)
+//Form controls
+var slider = document.getElementById("rngPasswordLength");
+var inptLenTxt = document.getElementById("inptLenTxt");
+inptLenTxt.value = slider.value; // Display the default slider value
+
+// Update the input box value (each time you drag the slider handle) and update the
+//password input object length property
 slider.oninput = function() {
-  output.innerHTML = this.value;
+  inptLenTxt.value = this.value;
+  passwordInpt['len']=this.value;
 }
+//update the slider each time you enter into the input box and update the
+//password input object length property
+inptLenTxt.oninput = function() {
+  slider.value = this.value;
+  passwordInpt['len']=this.value;
+}
+
