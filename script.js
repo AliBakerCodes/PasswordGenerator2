@@ -155,7 +155,7 @@ function generatePassword(length, lower, upper, numeric, special) {
   // and a character in that array. Since the characters were chosen at random when the array was created, they should be random as well.
   //Then add to the generated password variable
   for (i = 0; i < length; i++) {
-    generated = generated + charTypeArray[randArray(charTypeArray)].charAt(i);
+    generated = escapeRegex(generated + charTypeArray[randArray(charTypeArray)].charAt(i));
     console.log(generated);
   }
 
@@ -208,7 +208,7 @@ var tglLower = document.getElementById("tglLower");
 var tglUpper = document.getElementById("tglUpper");
 var tglNumeric = document.getElementById("tglNumeric");
 var tglSpecial = document.getElementById("tglSpecial");
-
+var allSwitch = document.querySelectorAll("input[type=checkbox]")
 //Get user inputs for password length
 function getUserInputLength() {
   passwordInpt["len"] = inptLenTxt.value;
@@ -247,23 +247,15 @@ inptLenTxt.oninput = function () {
 };
 
 //If you fail type validation, toggling a toggle will clear the error message
-tglLower.addEventListener("change", (event) => {
-  if (event.currentTarget.checked) {
-    typeErrorDiv.style.display = "none";
+//Iterate through the toggles setting a listener for each one. If any are checked,
+//get all the inputs and validate type again
+function toggleListener(switches) {
+  for (i=0;i<=switches.length; i++) {
+    switches[i].addEventListener("change", (event) => {
+      getUserInputType();
+      validateTypeInput(passwordInpt);
+    })
   }
-});
-tglUpper.addEventListener("change", (event) => {
-  if (event.currentTarget.checked) {
-    typeErrorDiv.style.display = "none";
-  }
-});
-tglNumeric.addEventListener("change", (event) => {
-  if (event.currentTarget.checked) {
-    typeErrorDiv.style.display = "none";
-  }
-});
-tglSpecial.addEventListener("change", (event) => {
-  if (event.currentTarget.checked) {
-    typeErrorDiv.style.display = "none";
-  }
-});
+};
+
+toggleListener(allSwitch);
