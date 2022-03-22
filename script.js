@@ -9,6 +9,7 @@ var passwordInpt = {
   special: false,
   validLength: false,
   validType: false,
+  genPass: "",
 };
 
 //Character types
@@ -39,16 +40,16 @@ function writePassword() {
   console.log(passwordInpt.validType);
   if (passwordInpt.validLength && passwordInpt.validType) {
     //Generate Password
-    var password = generatePassword(
-      passwordInpt.len,
-      passwordInpt.lower,
-      passwordInpt.upper,
-      passwordInpt.numeric,
-      passwordInpt.special
-    );
-
+    // var password = generatePassword(
+    //   passwordInpt.len,
+    //   passwordInpt.lower,
+    //   passwordInpt.upper,
+    //   passwordInpt.numeric,
+    //   passwordInpt.special
+    // );
+    generatePassword(passwordInpt.len, passwordInpt.lower, passwordInpt.upper, passwordInpt.numeric, passwordInpt.special)
     //Output Password
-    passwordText.value = password;
+    passwordText.value = passwordInpt.genPass;
   }
 }
 
@@ -155,7 +156,7 @@ function generatePassword(length, lower, upper, numeric, special) {
   // and a character in that array. Since the characters were chosen at random when the array was created, they should be random as well.
   //Then add to the generated password variable
   for (i = 0; i < length; i++) {
-    generated = escapeRegex(generated + charTypeArray[randArray(charTypeArray)].charAt(i));
+    generated = generated + charTypeArray[randArray(charTypeArray)].charAt(i);
     console.log(generated);
   }
 
@@ -193,9 +194,9 @@ function generatePassword(length, lower, upper, numeric, special) {
     numeric == numericTest &&
     special == specialTest
   ) {
-    console.log(escapeRegex(generated));
-    generated = escapeRegex(generated);
-    return generated;
+    console.log(generated);
+    //generated = escapeRegex(generated);
+    passwordInpt["genPass"]= generated;
   } else {
     generatePassword(length, lower, upper, numeric, special);
   }
