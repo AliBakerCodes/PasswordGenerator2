@@ -250,8 +250,8 @@ inptLenTxt.oninput = function () {
 //Iterate through the toggles setting a listener for each one. If any are checked,
 //get all the inputs and validate type again
 function toggleListener(switches) {
-  for (i=0;i<=switches.length; i++) {
-    switches[i].addEventListener("change", (event) => {
+  for (i=0;i<switches.length; i++) {
+    switches[i].addEventListener("change", function(event){
       getUserInputType();
       validateTypeInput(passwordInpt);
     })
