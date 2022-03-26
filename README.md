@@ -1,5 +1,4 @@
 # Ali Baker Codes - PasswordGenerator
-# Ali Baker Codes - My Portfolio
 
 ## Link
 

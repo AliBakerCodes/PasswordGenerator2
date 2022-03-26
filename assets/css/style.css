@@ -29,7 +29,7 @@ header {
   padding-top: 0px;
   color: hsl(206, 17%, 28%);
 }
-
+/* card style */
 .card {
   background-color: hsl(0, 0%, 100%);
   border-radius: 5px;
@@ -71,7 +71,7 @@ header {
   display: block;
   clear: both;
 }
-
+/* Button Style */
 .btn {
   border: none;
   background-color: hsl(360, 91%, 36%);
@@ -96,7 +96,7 @@ button[disabled] {
 .float-right {
   float: right;
 }
-
+/* Password text area style */
 #password {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -150,7 +150,7 @@ button[disabled] {
   opacity: 1; 
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+/* The slider handle  */
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none; 
   appearance: none;
@@ -258,7 +258,7 @@ input:checked + .toggle:before {
   color: red;
 }
 
-
+/* Media Queries for responsiveness */
 @media (max-width: 690px) {
   .btn {
     font-size: 1rem;

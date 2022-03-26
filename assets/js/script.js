@@ -39,14 +39,6 @@ function writePassword() {
   console.log(passwordInpt.validLength);
   console.log(passwordInpt.validType);
   if (passwordInpt.validLength && passwordInpt.validType) {
-    //Generate Password
-    // var password = generatePassword(
-    //   passwordInpt.len,
-    //   passwordInpt.lower,
-    //   passwordInpt.upper,
-    //   passwordInpt.numeric,
-    //   passwordInpt.special
-    // );
     generatePassword(passwordInpt.len, passwordInpt.lower, passwordInpt.upper, passwordInpt.numeric, passwordInpt.special)
     //Output Password
     passwordText.value = passwordInpt.genPass;
